@@ -25,6 +25,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
+      Description: {
+        allowNull: false,
+        type: Sequelize.STRING(10000)
+      },
       Material: {
         allowNull: false,
         type: Sequelize.STRING
@@ -36,6 +40,10 @@ module.exports = {
       Brand: {
         allowNull: false,
         type: Sequelize.STRING
+      },
+      Hot: {
+        defaultValue: false,
+        type: Sequelize.BOOLEAN
       },
       Category_ID: {
         allowNull: false,

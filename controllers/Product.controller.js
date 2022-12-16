@@ -3,11 +3,11 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const AddProduct = async (req, res) => {
     const { file, body } = req;
-    const { ProductName, Material, Price, Discount, Origin, Brand, Category_ID } = body;
+    const { ProductName, Material, Price, Discount, Origin, Brand, Description, Hot, Category_ID } = body;
     try {
-        if (ProductName && Material && Price && Discount && Origin && Brand && file?.path && Category_ID) {
+        if (ProductName && Material && Price && Discount && Origin && Description && Hot && Brand && file?.path && Category_ID) {
             const ProductImage = await file.path.replace(/\\/g, '/');
-            const newProduct = await Product.create({ ProductName, ProductImage, Material, Price, Discount, Origin, Brand, Category_ID });
+            const newProduct = await Product.create({ ProductName, ProductImage, Description, Hot, Material, Price, Discount, Origin, Brand, Category_ID });
             res.status(200).send(newProduct)
         } else {
             res.status(403).send("Data is not enough");
@@ -67,20 +67,22 @@ const DeleteProduct = async (req, res) => {
 
 const UpdateProduct = async (req, res) => {
     const { file, body, detail } = req;
-    const { ProductName, Material, Price, Discount, Origin, Brand, Category_ID } = body;
+    const { ProductName, Material, Price, Discount, Origin, Brand, Description, Hot, Category_ID } = body;
     try {
         let ProductImage;
         ProductImage = detail.ProductImage;
         if (file) {
             ProductImage = await file.path.replace(/\\/g, '/');
         }
-        if (ProductName && Material && Price && Discount && Origin && Brand && Category_ID) {
+        if (ProductName && Material && Price && Discount && Description && Hot && Origin && Brand && Category_ID) {
             detail.ProductName = ProductName;
             detail.Description = Material;
             detail.Price = Price;
             detail.Origin = Origin;
             detail.Brand = Brand;
             detail.Discount = Discount;
+            detail.Description = Description;
+            detail.Hot = Hot;
             detail.Category_ID = Category_ID;
             detail.ProductImage = ProductImage;
             await detail.save();
