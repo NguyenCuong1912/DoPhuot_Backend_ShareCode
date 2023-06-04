@@ -103,10 +103,34 @@ const Func_Checkout = async (req, res) => {
   }
 };
 const changeStatusAwait = async (req, res) => {
-  const { idBill } = req.body;
+  const { id, StausAwait } = req.body;
   try {
-    const detailBill = await Checkout.findOne({ id: idBill });
-    console.log(detailBill);
+    const detailBill = await Checkout.findOne({ where: { id } });
+    detailBill.StatusAwait = StausAwait;
+    detailBill.save();
+    res.status(200).send(detailBill);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+const changeStatusDelivery = async (req, res) => {
+  const { id, StatusDelivery } = req.body;
+  try {
+    const detailBill = await Checkout.findOne({ where: { id } });
+    detailBill.StatusDelivery = StatusDelivery;
+    detailBill.save();
+    res.status(200).send(detailBill);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+const changeStatusDone = async (req, res) => {
+  const { id, StatusDone } = req.body;
+  try {
+    const detailBill = await Checkout.findOne({ where: { id } });
+    detailBill.StatusDone = StatusDone;
+    detailBill.save();
+    res.status(200).send(detailBill);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -196,7 +220,7 @@ const getToTalWithMonth = async (req, res) => {
     for (let index = 1; index <= 12; index++) {
       const result = await sequelize.query(
         `
-          select sum(ToTalMoney) as total from Checkouts where month(createdAt) = ${index}
+          select sum(ToTalMoney) as total from Checkouts where month(createdAt)  = ${index} and StatusDone = 1
             `,
         { type: QueryTypes.SELECT }
       );
@@ -213,6 +237,8 @@ const getToTalWithMonth = async (req, res) => {
 };
 module.exports = {
   changeStatusAwait,
+  changeStatusDelivery,
+  changeStatusDone,
   Func_Checkout,
   Require_Checkout,
   AllBill,
